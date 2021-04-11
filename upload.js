@@ -118,7 +118,7 @@ async function predict(image) {
             const classPrediction =
             prediction[i].className + ": " + prediction[i].probability.toFixed(2);
         }
-        let result = [score,name];
+        let result = [name];
         console.log(score);
         console.log(name)
         return new Promise (function(resolve, reject){
