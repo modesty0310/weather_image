@@ -8,6 +8,17 @@ let dress_result = {
     outer : []
 }
 
+ app.get("/", (req, res) => {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "X-Requested-With");
+      // 위 두 줄을 추가해주면 CORS 를 허용하게 됩니다.
+   
+      res.send({
+    	corsTest: "succeed"
+      });
+      // 테스트 목적으로 response (응답할) 데이터를 정해주었습니다.
+});
+
 
 function readURL(input) {
     if (input.files && input.files[0]) {
