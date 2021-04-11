@@ -1,0 +1,41 @@
+/* index.css */
+
+#weather_info {
+    background-color: #9AC1D9;
+    max-width: 1500px;
+    margin: auto auto;
+    border-radius: 1em;
+}
+
+#logic_output {
+    max-width: 1500px;
+    margin: auto auto;
+    border-radius: 1em;
+    font-size: 36px;
+    text-align: center;
+    color: antiquewhite;
+    /* display: none; */
+}
+
+.now_weather {
+    margin-left: 30px;
+    color: #062744;
+    font-size: 24px;
+    border-spacing: 20px;
+}
+
+#weather_forecast {
+    margin-left: 50px;
+    color: #062744;
+    font-size: 22px;
+    border-spacing: 50px 0px;
+}
+
+#weather_f_title {
+    margin-left: 70px;
+    text-align: center;
+}
+
+#weather_forecast2 {
+    text-align: right;
+}
