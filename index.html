@@ -5,13 +5,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- [HTTP] Mixed Content 와 CORS 이슈 해결법 -->
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
-    <title>Document</title>
+        <!-- [HTTP] Mixed Content 와 CORS 이슈 해결법 -->
+      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
+    <title>Fashion Complete weather</title>
 </head>
 <link rel="stylesheet" href="upload.css">
 <link rel="stylesheet" href="index.css" />
 <link rel="stylesheet" href="index.css" />
+<link rel="stylesheet" href="dashboard.css"/>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/flatly/bootstrap.min.css" integrity="sha384-qF/QmIAj5ZaYFAeQcrQ6bfVMAh4zZlrGwTPY7T/M+iTTLJqJBJjwwnsE5Y0mV7QK" crossorigin="anonymous">
+
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -20,70 +26,87 @@
 
 
 <body id="body">
+    <div id="div_load_image" style="position: absolute; top:50%; left: 50%; width: 0px; height: 0px; z-index: 9999; background: #f0f0f0; filter: alpha(opacity=50); opacity: alpha*0.5;">
+      <img src="loading.gif" style="width: 100px; height: 100px;">
+    </div>
     <div class="container">
-        <h1>jQuery Image Upload
+        <h1 class="h1">jQuery Image Upload
             <small>with preview</small>
         </h1>
         <div class="avatar-upload">
-            <div class="avatar-edit">
+            <!-- <div class="avatar-edit">
                 <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
                 <label for="imageUpload"></label>
-            </div>
+            </div> -->
             <div class="avatar-preview">
-                <div id="imagePreview" style="background-image: url(http://i.pravatar.cc/500?img=7);">
+                <div id="imagePreview" style="background-image: url(https://png.pngtree.com/element_our/20190601/ourlarge/pngtree-file-upload-icon-image_1344393.jpg);">
                 </div>
             </div>
         </div>
     </div>
 
-    <!--출력해주는 부분-->
-    <div id= "logic_output">
-      <span>현재 날씨에&nbsp</span>
-      <span>"야외 활동하기 딱 좋아요."</span><br/><br/>
-      <span>이후&nbsp</span>
-      <span>몇시에는&nbsp</span>    
-      <span>"더워질 것 같아요."</span><br/><br/>
-      <span>10 시간 정도 외출 시에는&nbsp</span>
-      <span>"우산을 챙기는게 좋겠어요. / 우산을 안챙겨도 되겠어요."</span><br/><br/>
+    <div class="btn-container">
+      <div class="content">
+        <button class="btn">Upload</button>
+        <input type='file' class="up-file" id="imageUpload" accept=".png, .jpg, .jpeg" />
+      </div>
+      <div class="camera">
+        <button class="btn-camera">Camera</button>
+      </div>
     </div>
-    <br/><br/><br/>
-    <div id= "weather_info">
-      <!--현재날씨-->
+
+     <div id= "weather_info">
       <table class="now_weather"> 
         <tr>
           <td><img id="js-now_icon" src=''></td>
-          <td id="js-now_temp">현재 온도</td>
-          <td id="js-now_feels_temp">체감 온도</td>
-          <td id="js-now_wind_speed">풍속 단위</td>
-          <td id="js-now_wind_deg">풍향</td>
-          <td id="js-now_clouds">구름비율</td>
-          <td id="js-now_visiblity">가시거리</td>
-          <td id="js-now_uvi"> UV 지수</td>
         </tr>  
       </table> 
    </div>
-   <br/>
-   <div id= "weather_info">
-      <!--시간대별 날씨-->
-      <br/>
-      <br/>
-      <table id="weather_forecast"> 
-        <tr id= "weather_f_title">
-          <td>시간</td>
-          <td>날씨</td>
-          <td>현재 온도</td>
-          <td>체감 온도</td>
-          <td>풍속</td>
-          <td>풍향</td>
-          <td>구름 비율</td>
-          <td>강수 확률</td>
-          <td>가시거리</td>
-          <td>UV 지수</td>
-        </tr>
-        <tbody id="weather_forecast2"></tbody>
-      </table>
-      <br/>
-      <br/>
+
+   <div class=dashboardContainer>
+     <div class="tiwnContainer">
+      <div class="mainScreen fir">
+        <!-- 현재 날씨 -->
+        <div class="weather-side one">
+          <div class="weather-gradient"></div>
+          <div class="date-container">
+              <h2 class="date-dayname"></h2>
+              <span class="date-day"></span>
+              <span class="location">Daegu, ko</span>
+          </div>
+          <div class="weather-container">
+              <h1 class="weather-temp"></h1>
+              <h3 class="weather-desc"></h3>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mainScreen sec">
+        <!-- 이후 날씨 -->
+        <div class="weather-side two">
+          <table class="table table-hover">
+            <thead style="text-align: center;">
+              <tr>
+                <th scope="col">Time</th>
+                <th scope="col">Icon</th>
+                <th scope="col">Temp</th>
+                <th scope="col">Wind</th>
+                <th scope="co1">Precipitation</th>
+              </tr>
+            </thead>
+            <tbody id="table table-hover" style="text-align: center;">
+            </tbody>
+          </table>
+          
+        </div>
+      </div>
+    </div>
+
+     <div class="mainScreen">
+      <div class="weather-side">
+        <p id = "logic_clothes_select"></p>
+      </div>
+    </div>
    </div>
 </body>
 
