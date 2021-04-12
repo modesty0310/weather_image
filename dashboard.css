@@ -1,0 +1,188 @@
+.btn-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-container .content{
+  position: relative;
+}
+
+.btn-container .content input[type=file]{
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  opacity: 0 !important;
+  width: 100%;
+}
+
+.btn-container .content .btn {
+  border: 1px solid gray;
+  color: rgb(73, 71, 71);
+  background-color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.btn-container .content .btn:hover {
+  background: #333;
+  color: #fff;
+}
+
+.btn-container .camera .btn-camera {
+  border: 1px solid gray;
+  color: rgb(73, 71, 71);
+  background-color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.btn-container .camera .btn-camera:hover {
+  background: #333;
+  color: #fff;
+}
+
+.dashboardContainer{
+    width:1300px;
+    margin: 0 auto;
+    margin-bottom:20px;
+    background:white;
+    /* background: rgb(42, 23, 49); */
+    display:flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    padding:20px;
+    
+  }
+
+  .center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tiwnContainer{
+    display: flex;
+  }
+
+  .fir{
+    position: relative;
+    color: white;
+    z-index: 1;
+    transition: all 0.5s linear;
+  }
+  
+  .fir:hover{
+    transform: scale( 1.1 )
+  }
+
+  .sec{
+    position: relative;
+    right: 30px;
+  }
+
+  .mainScreen{
+    padding:8px;
+    border-radius: 25px;
+	  -webkit-box-shadow: 0 0 70px -10px rgba(0, 0, 0, 0.2);
+	        box-shadow: 0 0 70px -10px rgba(0, 0, 0, 0.2);
+	  background: white;
+	  height: 400px;
+  }
+
+  
+  .weather-side {
+    position: relative;
+    height: 100%;
+    border-radius: 25px;
+    width: 300px;
+    box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.2);
+    -webkit-transform: translateZ(0) scale(1.02) perspective(1000px);
+            transform: translateZ(0) scale(1.02) perspective(1000px);
+    /* float: left; */
+  }
+
+  .one{
+    background-image: url("data:image/jpeg;base64,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");
+  }
+
+  .two{
+    margin-top: 10px;
+    width: 600px;
+    bottom: 15px;
+    display: flex;
+    justify-content: center;
+    
+  }
+  
+  .two *{
+    margin-left: 30px;
+  }
+
+  .weather-gradient {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-image: var(--gradient);
+    border-radius: 25px;
+    opacity: 0.8;
+  }
+
+  .date-container {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+  }
+  
+  .date-dayname {
+    margin: 0;
+  }
+  
+  .date-day {
+    display: block;
+  }
+  
+  .location {
+    display: inline-block;
+    margin-top: 10px;
+  }
+  
+  .location-icon {
+    display: inline-block;
+    height: 0.8em;
+    width: auto;
+    margin-right: 5px;
+  }
+  
+  .weather-container {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+  }
+  
+  .weather-icon.feather {
+    height: 60px;
+    width: auto;
+  }
+  
+  .weather-temp {
+    margin: 0;
+    font-weight: 700;
+    font-size: 4em;
+  }
+  
+  .weather-desc {
+    margin: 0;
+  }
+
+   .fas{
+    height: 100px;
+  }
