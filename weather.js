@@ -1,13 +1,40 @@
-// weather.js
+let f_tempArray = new Array();
+let temp_json = [];
 
 //css element
-const now_temp = document.querySelector("#js-now_temp");
-const now_feels_temp = document.querySelector("#js-now_feels_temp");
-const now_wind_speed = document.querySelector("#js-now_wind_speed");
-const now_wind_deg = document.querySelector("#js-now_wind_deg");
-const now_clouds = document.querySelector("#js-now_clouds");
-const now_visiblity = document.querySelector("#js-now_visiblity");
-const now_uvi = document.querySelector("#js-now_uvi");
+const dayName = document.querySelector(".date-dayname");
+const dayDate = document.querySelector(".date-day");
+const location1 = document.querySelector(".location");
+const weatherTemp = document.querySelector(".weather-temp");
+const weatherText = document.querySelector(".weather-desc");
+
+
+
+
+const week = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+
+//낮 밤 d,n으로 나눠줘야함
+const iconArray = {
+     '01n' : 'fas fa-sun',
+     '02n' : 'fas fa-cloud-sun',
+     '03n' : 'fas fa-cloud',
+     '04n' : 'fas fa-cloud-meatball',
+     '09n' : 'fas fa-cloud-sun-rain',
+     '10n' : 'fas fa-cloud-showers-heavy',
+     '11n' : 'fas fa-poo-storm',
+     '13n' : 'fas fa-snowflake',
+     '50n' : 'fas fa-smog',
+     '01d' : 'fas fa-sun',
+     '02d' : 'fas fa cloud-sun',
+     '03d' : 'fas fa-cloud',
+     '04d' : 'fas fa-cloud-meatball',
+     '09d' : 'fas fa-cloud-sun-rain',
+     '10d' : 'fas fa-cloud-showers-heavy',
+     '11d' : 'fas fa-foo-storm',
+     '13d' : 'fas fa-snowflake',
+     '50d' : 'fas fa-smog', 
+}
+
 const now_icon = document.getElementById("js-now_icon"); //img태그 id값으로 가져오기
 
 //api info
@@ -25,8 +52,20 @@ function getWeather(lat, lng) {
         .then(function(json) {
             console.log(json)
 
+            let date = new Date(); 
+            let year = date.getFullYear(); 
+            let month = new String(date.getMonth()+1); 
+            let day = new String(date.getDate());
+            let dayIndex = date.getDay();
+            let weekText = week[dayIndex];
+
+            const description = json.current.weather[0].description;
+            const icon = json.current.weather[0].icon;
+
+
             //현재 ---------------------------------------------------------------------------
             const n_temperature = json.current.temp + "°C"; //현재 온도
+            temp_json = json.current.temp
 
             //현재 시간
             const now_time = json.current.dt; //유닉스시간
@@ -40,29 +79,21 @@ function getWeather(lat, lng) {
             let imgIcon = "http://openweathermap.org/img/wn/" + json.current.weather[0].icon + "@2x.png"; // json으로 받아온 날씨(json.current.weather[0].icon)에 맞는 아이콘 요청해서 받음
             now_icon.setAttribute("src", imgIcon); //img태그 src 속성에 받아온 imgIcon 추가
 
-            //풍속 current.wind_speed
-            const n_wind_speed = json.current.wind_speed;
-            //풍향 current.wind_deg
-            const n_wind_deg = json.current.wind_deg;
-            //구름 비율 current.clouds
-            const n_clouds = json.current.clouds;
-            //가시 거리 current.visibility
-            const n_visiblity = json.current.visibility;
-            //uv지수 current.uvi
-            const n_uvi = json.current.uvi;
 
-            now_temp.innerText = `현재 온도: ${n_temperature}`;
-            now_feels_temp.innerText = `체감 온도: ${n_feels_like}`;
-            now_wind_speed.innerText = `풍속: ${n_wind_speed}m/s`;
-            now_wind_deg.innerText = `풍향: ${n_wind_deg}° `;
-            now_clouds.innerText = `구름 비율: ${n_clouds}%`;
-            now_visiblity.innerText = `가시 거리: ${n_visiblity}m`;
-            now_uvi.innerText = `UV지수: ${n_uvi}\r`;
+            let iconStr = icon.substr(0,3);
+            $('.weather-container').prepend('<i class="' + iconArray[iconStr] + ' fa-5x"></i>')
+
+
+            dayDate.innerText = year+" / "+month+ " / " + day;
+            dayName.innerText = weekText;
+            weatherTemp.innerText = n_temperature;
+            weatherText.innerText = description;
 
             //------------------------------------------------------------------------------------
-            const table = document.getElementById('weather_forecast2');
+            const table = document.getElementById('table table-hover');
+            console.log(table)
 
-            for (i = 0; i < 10; i++) {
+            for (i = 0; i < 4; i++) {
 
                 const newRow = table.insertRow(i);
 
@@ -72,20 +103,10 @@ function getWeather(lat, lng) {
                 const forecast_icon = newRow.insertCell(1);
                 //현재 온도
                 const forecast_temp = newRow.insertCell(2);
-                //체감 온도
-                const forecast_feels = newRow.insertCell(3);
                 //풍속
-                const forecast_w_speed = newRow.insertCell(4);
-                //풍향
-                const forecast_w_deg = newRow.insertCell(5);
-                //구름비율
-                const forecast_clouds = newRow.insertCell(6);
+                const forecast_w_speed = newRow.insertCell(3);
                 //강수확률
-                const forecast_pop = newRow.insertCell(7);
-                //가시거리
-                const forecast_visibility = newRow.insertCell(8);
-                //UV 지수
-                const forecast_uvi = newRow.insertCell(9);
+                const forecast_pop = newRow.insertCell(4);
 
                 const h_date = new Date(json.hourly[i].dt * 1000);
                 const h_time = h_date.getHours(); //hour만 가져오기
@@ -99,29 +120,17 @@ function getWeather(lat, lng) {
 
                 //테이블 행 추가하기
 
+
+
                 const f_temp = json.hourly[i].temp;
                 forecast_temp.innerText = `${f_temp}°C\n`;
-
-                const f_feels = json.hourly[i].feels_like;
-                forecast_feels.innerText = `${f_feels}°C\n`;
+                f_tempArray[i]  = f_temp;
 
                 const f_w_speed = json.hourly[i].wind_speed;
                 forecast_w_speed.innerText = `${f_w_speed}m/s\n`;
 
-                const f_w_deg = json.hourly[i].wind_deg;
-                forecast_w_deg.innerText = `${f_w_deg}°\n`;
-
-                const f_clouds = json.hourly[i].clouds;
-                forecast_clouds.innerText = `${f_clouds}%\n`;
-
                 const f_pop = json.hourly[i].pop;
                 forecast_pop.innerText = `${f_pop}%\n`;
-
-                const f_visibility = json.hourly[i].visibility;
-                forecast_visibility.innerText = `${f_visibility}m\n`;
-
-                const f_uvi = json.hourly[i].uvi;
-                forecast_uvi.innerText = `${f_uvi}\n`;
             }
 
         });
