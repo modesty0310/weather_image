@@ -1,28 +1,84 @@
 const url = "https://teachablemachine.withgoogle.com/models/34U7khARe/";
 
+let mainImg="";
+function modal(id) {
+    var zIndex = 9999;
+    var modal = document.getElementById(id);
+
+    // 모달 div 뒤에 희끄무레한 레이어
+    var bg = document.createElement('div');
+    bg.setStyle({
+        position: 'fixed',
+        zIndex: zIndex,
+        left: '0px',
+        top: '0px',
+        width: '100%',
+        height: '100%',
+        overflow: 'auto',
+        // 레이어 색갈은 여기서 바꾸면 됨
+        backgroundColor: 'rgba(0,0,0,0.4)'
+    });
+    document.body.append(bg);
+
+    // 닫기 버튼 처리, 시꺼먼 레이어와 모달 div 지우기
+    modal.querySelector('.modal_close_btn').addEventListener('click', function() {
+        bg.remove();
+        modal.style.visibility = "hidden";
+    });
+
+    modal.setStyle({
+        position: 'fixed',
+        visibility: 'visible',
+        boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+
+        // 시꺼먼 레이어 보다 한칸 위에 보이기
+        zIndex: zIndex + 1,
+
+        // div center 정렬
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        msTransform: 'translate(-50%, -50%)',
+        webkitTransform: 'translate(-50%, -50%)'
+    });
+}
+
+// Element 에 style 한번에 오브젝트로 설정하는 함수 추가
+Element.prototype.setStyle = function(styles) {
+    for (var k in styles) this.style[k] = styles[k];
+    return this;
+};
+
+document.getElementById('avatar-preview').addEventListener('click', function() {
+    // 모달창 띄우기
+    console.log(mainImg);
+    $('#img_view').attr("src",mainImg);
+    modal('img_modal');
+});
+
+
+
+
 let dress_result = {
     top : [],
     bottom : [],
     outer : []
 }
 
-
-
-
-
 let model, maxPredictions;
 // 이 변수로 옷 분석결과 접근하시면 됩니다.
 
 window.onload = function(){
     $("#div_load_image").hide();
+    $("main").hide();
 }
-
 
 
 function readURL(input) {
     if (input.files && input.files[0]) {
-        var reader = new FileReader();
+        let reader = new FileReader();
         reader.onload = function(e) {
+            mainImg=e.target.result;
             $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
             $('#imagePreview').hide();
             $('#imagePreview').fadeIn(650);
@@ -32,17 +88,23 @@ function readURL(input) {
 }
 
 $("#imageUpload").change(async function(e) {
+    dress_result = {
+        top : [],
+        bottom : [],
+        outer : []
+    }   
     $("#div_load_image").show();
     $("#body").css('opacity','0.5');
     
     $('canvas').remove();
     readURL(this);
     await init_upload();
-    var formData = new FormData();
-    var photoFile = document.getElementById("imageUpload");
+    let formData = new FormData();
+    let photoFile = document.getElementById("imageUpload");
     formData.append("image", photoFile.files[0]);
-
     console.log(formData);
+    console.log(photoFile.files[0])
+    console.log(photoFile);
 
     axios.post('https://dapi.kakao.com/v2/vision/product/detect', formData, {
         headers: {
@@ -105,17 +167,39 @@ $("#imageUpload").change(async function(e) {
                 }
             }
             console.log(dress_result)
-            $("#div_load_image").hide();
-            $("#body").css('opacity','');
-
-        //  get_data().then(function(result){
-        //     check_dress(temp_json[0],result);
-        //  });
     })
-    setTimeout(() => check_dress(temp_json,dress_result), 2000)
+    setTimeout(() => check_dress(temp_json,dress_result).then(function(){
+        $("main").hide();
+        console.log(dress_result["top"].length)
+        if(dress_result["top"].length==0 && dress_result["bottom"].length==0 && dress_result["outer"].length==0){
+            console.log("testestset");
+            let graph=document.querySelector(".graph");
+            let resu=document.querySelector("#logic_clothes_select");
+            graph.innerText = "Not Found";
+            // resu.innerText="Not Found";
+            $(".graph").show();
+            
+        }else{
+            $('ul').empty();
+
+            for(let i=0; i<nameData.length; i++){
+                $('ul').append("<li><em>"+nameData[i]+"</em><span>"+scoreData[i]+"</span></li>")
+            }
+            createPie(".pieID.legend", ".pieID.pie");
+            scoreData.length = 0;
+            nameData.length = 0;
+            idx = 0;
+            $(".graph").hide();
+            $("main").show();
+        }
+        $("#div_load_image").hide();
+        $("#body").css('opacity','');
+    }), 2000)
 });
 
-
+let scoreData = new Array();
+let nameData = new Array();
+let idx = 0;
 
 
 async function init_upload() {
@@ -138,6 +222,11 @@ async function predict(image) {
             const classPrediction =
             prediction[i].className + ": " + prediction[i].probability.toFixed(2);
         }
+
+        scoreData[idx] = score;
+        nameData[idx] = name;
+        idx++;
+
         let result = name;
         return new Promise (function(resolve, reject){
             resolve(result);
@@ -153,166 +242,237 @@ async function check_dress(N_Temp,result){
     let min_temp = Math.max.apply(null, f_tempArray);
     //console.log(N_Temp);
     //temp 최소값과 최대값 빼서 일교차 구하고 일교차가 10도 이상이면 겉옷 챙기라는 문구 보내기 
-    if(max_temp-min_temp>=10)
-    {
-        Daily_Temperature_Different.innerText="오늘 일교차가 크니 겉옷을 챙기세요";
-    
-        //각 온도에 맞는 옷 추천
-        if(N_Temp>=23 && N_Temp<=26)
+    if(result.top == "" && result.outer == ""){
+        Clothes_select.innerText="상체가 나오게 사진을 찍어 주세요.";
+    }else if(result.pants == ""){
+        Clothes_select.innerText="하체가 나오게 사진을 찍어 주세요.";
+    }else{
+        if(max_temp-min_temp>=10)
         {
-            console.log("현재"+N_Temp+"℃ 입니다.\n ");
-            if((result.top=="민소매"&& result.bottom=="긴바지")||(result.top=="민소매"&& result.bottom =="반바지"))
+            Daily_Temperature_Different.innerText="오늘 일교차가 크니 겉옷을 챙기세요";
+        
+            //각 온도에 맞는 옷 추천
+            if(N_Temp>=23 && N_Temp<=26)
             {
-                console.log("날씨가 추우니 좀 더 두껍게 입으세요");
-                Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
+                console.log("현재"+N_Temp+"℃ 입니다.\n ");
+                if((result.top=="민소매"&& result.bottom=="긴바지")||(result.top=="민소매"&& result.bottom =="반바지"))
+                {
+                    console.log("날씨가 추우니 좀 더 두껍게 입으세요");
+                    Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
+                }
+                else{
+                    console.log("활동하기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                }
             }
-            else{
-                console.log("complete");
-                Clothes_select.innerText="complete";
+            else if(N_Temp>27){
+                console.log("현재"+N_Temp+"℃ 입니다.\n ");
+                if(result.outer="1"||(result.top=="긴팔"&& result.bottom=="긴바지")||(result.top=="반팔"&& result.bottom=="반바지")||(result.top=='["긴팔"]'&&result.bottom=="반바지")||(result.top=="반팔"&& result.bottom=="긴바지")){
+                    console.log("날씨가 더우니 좀 더 가볍게 입으세요");
+                    Clothes_select.innerText="날씨가 더우니 좀 더 가볍게 입으세요";
+                }
+                else{
+                    console.log("활동하기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                }
             }
-        }
-        else if(N_Temp>27){
-            console.log("현재"+N_Temp+"℃ 입니다.\n ");
-            if(result.outer="1"||(result.top=='["긴팔"]'&& result.bottom=="긴바지")||(result.top=="반팔"&& result.bottom=="반바지")||(result.top=='["긴팔"]'&&result.bottom=="반바지")||(result.top=="반팔"&& result.bottom=="긴바지")){
-                console.log("날씨가 더우니 좀 더 가볍게 입으세요");
-                Clothes_select.innerText="날씨가 더우니 좀 더 가볍게 입으세요";
+            else if(N_Temp>=17&&N_Temp<=22){
+                console.log("현재"+N_Temp+"℃ 입니다.\n ");
+                        
+                if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지"))
+                {
+                    console.log("날씨가 추우니 좀 더 두껍게 입으세요");
+                    Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
+                }
+                else{
+                    console.log("활동하기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                }
             }
-            else{
-                console.log("complete");
-                Clothes_select.innerText="complete";
-            }
-        }
-        else if(N_Temp>=17&&N_Temp<=22){
-            console.log("현재"+N_Temp+"℃ 입니다.\n ");
-                    
-            if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지"))
+            // else if(N_Temp>=17||N_Temp<=19)
+            // {
+            //     console.log("현재"+N_Temp+"℃ 입니다.\n ");
+                
+            //     if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지"))
+            //     {console.log("날씨가 추우니 좀 더 두껍게 입으세요");}
+            //     else{
+            //         console.log("활동하기 딱 좋은 복장이네요.");
+            //     }
+            // }
+            else if(N_Temp>=12&&N_Temp<=16)
             {
-                console.log("날씨가 추우니 좀 더 두껍게 입으세요");
-                Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
+                console.log("현재"+N_Temp+"℃ 입니다.\n ");
+                if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지"))
+                {
+                    console.log("날씨가 추우니 좀 더 두껍게 입으세요");
+                    Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
+                }
+                else{
+                    console.log("활동하기 딱 좋은 복장이네요. 12~16");
+                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                }
             }
-            else{
-                console.log("complete");
-                Clothes_select.innerText="complete";
-            }
-        }
-        // else if(N_Temp>=17||N_Temp<=19)
-        // {
-        //     console.log("현재"+N_Temp+"℃ 입니다.\n ");
-            
-        //     if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지"))
-        //     {console.log("날씨가 추우니 좀 더 두껍게 입으세요");}
-        //     else{
-        //         console.log("complete");
-        //     }
-        // }
-        else if(N_Temp>=12&&N_Temp<=16)
-        {
-            console.log("현재"+N_Temp+"℃ 입니다.\n ");
-            if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지"))
+            else if(N_Temp<=10)
             {
-                console.log("날씨가 추우니 좀 더 두껍게 입으세요");
-                Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
-            }
-            else{
-                console.log("complete 12~16");
-                Clothes_select.innerText="complete";
+                console.log("현재"+N_Temp+"℃ 입니다.\n ");
+                if((result.top=="민소매"&& result.bottom=="긴바지")||(result.top=="민소매"&& result.bottom=="반바지")||(result.top=="반팔"&& result.bottom=="긴바지")||(result.top=="반팔"&& result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지")){
+                    console.log("날씨가 추우니 좀 더 두껍게 입으세요");
+                    Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
+                }
+                else{
+                    console.log("활동하기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                }
             }
         }
-        else if(N_Temp<=10)
-        {
-            console.log("현재"+N_Temp+"℃ 입니다.\n ");
-            if((result.top=="민소매"&& result.bottom=="긴바지")||(result.top=="민소매"&& result.bottom=="반바지")||(result.top=="반팔"&& result.bottom=="긴바지")||(result.top=="반팔"&& result.bottom=="반바지")){
-                console.log("날씨가 추우니 좀 더 두껍게 입으세요");
-                Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
+        else{
+            //각 온도에 맞는 옷 추천
+            if(N_Temp>=23 && N_Temp<=26)
+            {
+                console.log("현재"+N_Temp+"℃ 입니다.\n ");
+                if((result.top=="민소매"&& result.bottom=="긴바지")||(result.top=="민소매"&& result.bottom=="반바지"))
+                {
+                    console.log("날씨가 추우니 좀 더 두껍게 입으세요");
+                    Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
+                }
+                else if(result.outer="1")
+                {
+                    console.log("날씨가 더우니 좀 더 얇게 입으세요");
+                    Clothes_select.innerText="날씨가 더우니 좀 더 가볍게 입으세요";
+                }
+                else{
+                    console.log("활동하기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                }
             }
-            else{
-                console.log("complete");
-                Clothes_select.innerText="complete";
+            else if(N_Temp>27){
+                console.log("현재"+N_Temp+"℃ 입니다.\n ");
+                if(result.outer="1"||(result.top=="긴팔"&& result.bottom=="긴바지")||(result.top=="반팔"&& result.bottom=="반바지")||(result.top=='["긴팔"]'&&result.bottom=="반바지")||(result.top=="반팔"&& result.bottom=="긴바지")){
+                    console.log("날씨가 더우니 좀 더 가볍게 입으세요");
+                    Clothes_select.innerText="날씨가 더우니 좀 더 가볍게 입으세요";
+                }
+                else{
+                    console.log("활동하기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                }
+            }
+            else if(N_Temp>=17&&N_Temp<=22){
+                console.log("현재"+N_Temp+"℃ 입니다.\n ");
+                        
+                if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지"))
+                {
+                    console.log("날씨가 추우니 좀 더 두껍게 입으세요");
+                    Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
+                }
+                else{
+                    console.log("활동하기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                }
+            }
+            // else if(N_Temp>=17||N_Temp<=19)
+            // {
+            //     console.log("현재"+N_Temp+"℃ 입니다.\n ");
+                
+            //     if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지"))
+            //     {console.log("날씨가 추우니 좀 더 두껍게 입으세요");}
+            //     else{
+            //         console.log("활동하기 딱 좋은 복장이네요.");
+            //     }
+            // }
+            else if(N_Temp>=12&&N_Temp<=16)
+            {
+                console.log("현재"+N_Temp+"℃ 입니다.\n ");
+                if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지")||(result.top=="긴팔"&&result.bottom=="반바지"))
+                {
+                    console.log("날씨가 추우니 좀 더 두껍게 입으세요");
+                    Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
+                }
+                else{
+                    console.log(result.top);
+                    console.log(result.bottom);
+                    console.log("활동하기 딱 좋은 복장이네요. 12~16" );
+                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                }
+            }
+            else if(N_Temp<=10)
+            {
+                console.log("현재"+N_Temp+"℃ 입니다.\n ");
+                
+                if((result.top=="민소매"&& result.bottom=="긴바지")||(result.top=="민소매"&& result.bottom=="반바지")||(result.top=="반팔"&& result.bottom=="긴바지")||(result.top=="반팔"&& result.bottom=="반바지")){
+                    console.log("날씨가 추우니 좀 더 두껍게 입으세요");
+                    Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
+                }
+                else{
+                    console.log("활동하기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                }
             }
         }
     }
-    else{
-        //각 온도에 맞는 옷 추천
-        if(N_Temp>=23 && N_Temp<=26)
-        {
-            console.log("현재"+N_Temp+"℃ 입니다.\n ");
-            if((result.top=="민소매"&& result.bottom=="긴바지")||(result.top=="민소매"&& result.bottom=="반바지"))
-            {
-                console.log("날씨가 추우니 좀 더 두껍게 입으세요");
-                Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
-            }
-            else if(result.outer="1")
-            {
-                console.log("날씨가 더우니 좀 더 얇게 입으세요");
-                Clothes_select.innerText="날씨가 더우니 좀 더 가볍게 입으세요";
-            }
-            else{
-                console.log("complete");
-                Clothes_select.innerText="complete";
-            }
-        }
-        else if(N_Temp>27){
-            console.log("현재"+N_Temp+"℃ 입니다.\n ");
-            if(result.outer="1"||(result.top=="긴팔"&& result.bottom=="긴바지")||(result.top=="반팔"&& result.bottom=="반바지")||(result.top=='["긴팔"]'&&result.bottom=="반바지")||(result.top=="반팔"&& result.bottom=="긴바지")){
-                console.log("날씨가 더우니 좀 더 가볍게 입으세요");
-                Clothes_select.innerText="날씨가 더우니 좀 더 가볍게 입으세요";
-            }
-            else{
-                console.log("complete");
-                Clothes_select.innerText="complete";
-            }
-        }
-        else if(N_Temp>=17&&N_Temp<=22){
-            console.log("현재"+N_Temp+"℃ 입니다.\n ");
-                    
-            if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지"))
-            {
-                console.log("날씨가 추우니 좀 더 두껍게 입으세요");
-                Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
-            }
-            else{
-                console.log("complete");
-                Clothes_select.innerText="complete";
-            }
-        }
-        // else if(N_Temp>=17||N_Temp<=19)
-        // {
-        //     console.log("현재"+N_Temp+"℃ 입니다.\n ");
-            
-        //     if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지"))
-        //     {console.log("날씨가 추우니 좀 더 두껍게 입으세요");}
-        //     else{
-        //         console.log("complete");
-        //     }
-        // }
-        else if(N_Temp>=12&&N_Temp<=16)
-        {
-            console.log("현재"+N_Temp+"℃ 입니다.\n ");
-            if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지")||(result.top=="긴팔"&&result.bottom=="반바지"))
-            {
-                console.log("날씨가 추우니 좀 더 두껍게 입으세요");
-                Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
-            }
-            else{
-                console.log(result.top);
-                console.log();
-                console.log("complete 12~16" );
-                Clothes_select.innerText="complete";
-            }
-        }
-        else if(N_Temp<=10)
-        {
-            console.log("현재"+N_Temp+"℃ 입니다.\n ");
-            
-            if((result.top=="민소매"&& result.bottom=="긴바지")||(result.top=="민소매"&& result.bottom=="반바지")||(result.top=="반팔"&& result.bottom=="긴바지")||(result.top=="반팔"&& result.bottom=="반바지")){
-                console.log("날씨가 추우니 좀 더 두껍게 입으세요");
-                Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
-            }
-            else{
-                console.log("complete");
-                Clothes_select.innerText="complete";
-            }
-        }
-    }
+
+
 }
+
+
+
+/* chart */
+function sliceSize(dataNum, dataTotal) {
+    return (dataNum / dataTotal) * 360;
+  }
+  function addSlice(sliceSize, pieElement, offset, sliceID, color) {
+    $(pieElement).append("<div class='slice "+sliceID+"'><span></span></div>");
+    var offset = offset - 1;
+    var sizeRotation = -179 + sliceSize;
+    $("."+sliceID).css({
+      "transform": "rotate("+offset+"deg) translate3d(0,0,0)"
+    });
+    $("."+sliceID+" span").css({
+      "transform"       : "rotate("+sizeRotation+"deg) translate3d(0,0,0)",
+      "background-color": color
+    });
+  }
+  function iterateSlices(sliceSize, pieElement, offset, dataCount, sliceCount, color) {
+    var sliceID = "s"+dataCount+"-"+sliceCount;
+    var maxSize = 179;
+    if(sliceSize<=maxSize) {
+      addSlice(sliceSize, pieElement, offset, sliceID, color);
+    } else {
+      addSlice(maxSize, pieElement, offset, sliceID, color);
+      iterateSlices(sliceSize-maxSize, pieElement, offset+maxSize, dataCount, sliceCount+1, color);
+    }
+  }
+  function createPie(dataElement, pieElement) {
+    var listData = [];
+    $(dataElement+" span").each(function() {
+      listData.push(Number($(this).html()));
+    });
+    var listTotal = 0;
+    for(var i=0; i<listData.length; i++) {
+      listTotal += listData[i];
+    }
+    var offset = 0;
+    var color = [
+      /* "cornflowerblue", 
+      "olivedrab", 
+      "orange", 
+      "tomato", 
+      "crimson", 
+      "purple", 
+      "turquoise", 
+      "forestgreen", 
+      "navy" */
+      "ginsboro", 
+      "gray",
+      "black",
+      "silver"
+    ];
+    for(var i=0; i<listData.length; i++) {
+      var size = sliceSize(listData[i], listTotal);
+      iterateSlices(size, pieElement, offset, i, 0, color[i]);
+      $(dataElement+" li:nth-child("+(i+1)+")").css("border-color", color[i]);
+      offset += size;
+    }
+  }
+  /* createPie(".pieID.legend", ".pieID.pie"); */
+  
 
