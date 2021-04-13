@@ -31,7 +31,7 @@ const iconArray = {
      '13n' : 'fas fa-snowflake',
      '50n' : 'fas fa-smog',
      '01d' : 'fas fa-sun',
-     '02d' : 'fas fa cloud-sun',
+     '02d' : 'fas fa-cloud-sun',
      '03d' : 'fas fa-cloud',
      '04d' : 'fas fa-cloud-meatball',
      '09d' : 'fas fa-cloud-sun-rain',
