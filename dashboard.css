@@ -315,6 +315,7 @@ main {
     align-items: center;
   }
   .dashboardContainer{
+	width:550px;
     flex-direction: column;
     align-items: flex-start;
     padding: 8px 24px;
