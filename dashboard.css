@@ -75,16 +75,17 @@
     position: relative;
     color: white;
     z-index: 1;
-    transition: all 0.5s linear;
+    transition: 0.5s;
   }
   
-  .fir:hover{
-    transform: scale( 1.1 )
+  .mainScreen:hover{
+    transform:translateY(-15px);
   }
 
   .sec{
     position: relative;
     right: 30px;
+    transition: 0.5s;
   }
 
   .mainScreen{
@@ -94,6 +95,7 @@
 	        box-shadow: 0 0 70px -10px rgba(0, 0, 0, 0.2);
 	  background: white;
 	  height: 400px;
+    transition: 0.5s;
   }
 
   
@@ -118,7 +120,45 @@
     bottom: 15px;
     display: flex;
     justify-content: center;
+    overflow-y: scroll;
+  }
+
+  .three{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .three p{
+    font-weight: bold;
+    font-size: 25px;
+  }
+
+  .result{
+    width: 100%;
+    height: 50px;
+    margin-bottom: 10px;
     
+    border-radius: 25px;
+    box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.2);
+    background: whitesmoke;
+  }
+
+
+  .ab{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 99%;
+    height: 47px;
+    background: white;
+  }
+
+  #logic_clothes_select{
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 25px;
   }
   
   .two *{
@@ -186,3 +226,84 @@
    .fas{
     height: 100px;
   }
+
+  /* chart */
+  
+ @keyframes bake-pie {
+  from {
+    transform: rotate(0deg) translate3d(0, 0, 0);
+ }
+}
+main {
+  position: absolute;
+  bottom: 10px;
+}
+
+.pie {
+  height: 200px;
+  width: 200px;
+  position: relative;
+  margin: 0 30px 30px 0;
+}
+.pie::before {
+  content: "";
+  display: block;
+  position: absolute;
+  z-index: 1;
+  width: 100px;
+  height: 100px;
+  background: #eee;
+  border-radius: 50%;
+  top: 50px;
+  left: 50px;
+}
+.pie::after {
+  content: "";
+  display: block;
+  width: 120px;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  box-shadow: 0 0 3px 4px rgba(0, 0, 0, 0.1);
+  margin: 220px auto;
+}
+.slice {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  clip: rect(0px, 200px, 200px, 100px);
+  animation: bake-pie 1s;
+}
+.slice span {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: black;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  clip: rect(0px, 200px, 200px, 100px);
+}
+.legend {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  background: #fff;
+  padding: 15px;
+  font-size: 13px;
+  box-shadow: 1px 1px 0 #ddd, 2px 2px 0 #bbb;
+}
+.legend li {
+  width: 110px;
+  height: 1.25em;
+  margin-bottom: 0.7em;
+  padding-left: 0.5em;
+  border-left: 1.25em solid black;
+}
+.legend em {
+  font-style: normal;
+}
+.legend span {
+  float: right;
+}
