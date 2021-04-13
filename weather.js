@@ -72,6 +72,7 @@ function getWeather(lat, lng) {
             //유닉스 시간을 변경하기
             const n_date = new Date(now_time * 1000);
             const n_time = n_date.toLocaleTimeString();
+            const N_Hour = n_date.getHours();
 
             const n_feels_like = json.current.feels_like + "°C";
 
@@ -87,13 +88,20 @@ function getWeather(lat, lng) {
             dayDate.innerText = year+" / "+month+ " / " + day;
             dayName.innerText = weekText;
             weatherTemp.innerText = n_temperature;
-            weatherText.innerText = description;
+            weatherText.innerText = description.toUpperCase();
+
+             //이후 날씨 옷과 비교하기 위해 값을 담을 배열 객체 선언 ------------------------------------------
+             let f_hourArray = new Array();
+             let f_tempArray = new Array();
+             let f_pop       = new Array();
+             let f_icon_des = new Array();
+             let rain_time = "";
 
             //------------------------------------------------------------------------------------
             const table = document.getElementById('table table-hover');
             console.log(table)
 
-            for (i = 0; i < 4; i++) {
+            for (i = 0; i < 8; i++) {
 
                 const newRow = table.insertRow(i);
 
@@ -108,9 +116,14 @@ function getWeather(lat, lng) {
                 //강수확률
                 const forecast_pop = newRow.insertCell(4);
 
+                //날씨 아이콘 description 가져오기
+                f_icon_des[i] = json.hourly[i].weather[0].description;
+
+
                 const h_date = new Date(json.hourly[i].dt * 1000);
                 const h_time = h_date.getHours(); //hour만 가져오기
                 forecast_hour.innerText += `${h_time}시\n`;
+                f_hourArray[i] = h_time;
 
                 var img = document.createElement('img'); //이미지 객체 생성
                 img.src = "http://openweathermap.org/img/wn/" + json.hourly[i].weather[0].icon + "@2x.png";
@@ -131,9 +144,48 @@ function getWeather(lat, lng) {
 
                 const f_pop = json.hourly[i].pop;
                 forecast_pop.innerText = `${f_pop}%\n`;
-            }
+                const Daily_cloud =document.getElementById("logic_rain_cloud");
+                const outside_action=document.getElementById("logic_action");
 
-        });
+                if(f_icon_des[i]=="light rain"||f_icon_des[i]=="moderate rain"||f_icon_des[i]=="heavy intensity rain"||f_icon_des[i]=="very heavy rain" ||f_icon_des[i]=="extreme rain"||f_icon_des[i]=="freezing rain"||f_icon_des[i]=="light intensity shower rain"||f_icon_des[i]=="shower rain"||f_icon_des[i]=="heavy intensity shower rain"||f_icon_des[i]=="ragged shower rain")
+                {   
+                    if(f_icon_des[i].indexOf("rain") != -1){
+                        rain_time = f_hourArray[i];
+                    }
+                    // console.log(f_icon_des[i].indexOf("clouds"))
+                    // rain_time=f_hourArray[f_icon_des[i].indexOf("clouds")];
+                    var rain_time_calcural=rain_time-N_Hour;
+                    if(rain_time_calcural>0){
+                        console.log(rain_time_calcural+"시 후에 비가 올 예정이니 우산을 챙기세요");
+                        Daily_cloud.innerText =  `${rain_time_calcural}시 후에 금일 비가 올 예정이니 우산을 챙기세요.`;
+                    }
+                }
+                else if(f_icon_des[i]=="light snow"||f_icon_des[i]=="Snow"||f_icon_des[i]=="Heavy snow"||f_icon_des[i]=="Sleet" ||f_icon_des[i]=="Light shower sleet"||f_icon_des[i]=="Shower sleet"||f_icon_des[i]=="Light rain and snow"||f_icon_des[i]=="Rain and snow"||f_icon_des[i]=="Light shower snow"||f_icon_des[i]=="Shower snow"||f_icon_des[i]=="Heavy shower snow")
+                {   
+                    if(f_icon_des[i].indexOf("snow") != -1){
+                        rain_time = f_hourArray[i];
+                    }
+                    var rain_time_calcural=rain_time-N_Hour;
+                    if(rain_time_calcural>0){
+                        console.log(rain_time_calcural+"시 후에 비가 올 예정이니 우산을 챙기세요");
+                        Daily_cloud.innerText =  `"${rain_time_calcural}시 후에 금일 비가 올 예정이니 우산을 챙기세요."`;
+                }
+                else{
+                    //console.log(N_Temp);
+                    //현재 날씨 야외활동 여부
+                    if(N_Temp<=25 && N_Temp>=21)
+                    {
+    
+                        outside_action.innerText="현재 야외활동하기 좋은 날씨입니다."
+                    }
+                }
+            }
+            console.log(rain_time);    
+            }
+            //비 오는 시간 체크
+           
+
+    });
 
 }
 
