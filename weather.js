@@ -8,6 +8,13 @@ const location1 = document.querySelector(".location");
 const weatherTemp = document.querySelector(".weather-temp");
 const weatherText = document.querySelector(".weather-desc");
 
+//이후 날씨 옷과 비교하기 위해 값을 담을 배열 객체 선언 ------------------------------------------
+let f_hourArray = new Array();
+let f_tempArray = new Array();
+let f_pop       = new Array();
+let f_icon_des = new Array();
+let rain_time = "";
+
 
 
 
@@ -90,16 +97,11 @@ function getWeather(lat, lng) {
             weatherTemp.innerText = n_temperature;
             weatherText.innerText = description;
 
-             //이후 날씨 옷과 비교하기 위해 값을 담을 배열 객체 선언 ------------------------------------------
-             let f_hourArray = new Array();
-             let f_tempArray = new Array();
-             let f_pop       = new Array();
-             let f_icon_des = new Array();
-             let rain_time = "";
+
 
             //------------------------------------------------------------------------------------
             const table = document.getElementById('table table-hover');
-            console.log(table)
+            const Daily_Temperature_Different=document.getElementById("logic_clothes_select");
 
             for (i = 0; i < 8; i++) {
 
@@ -180,7 +182,14 @@ function getWeather(lat, lng) {
                     }
                 }
             }
-            console.log(rain_time);    
+            let max_temp = Math.max.apply(null, f_tempArray);
+            let min_temp = Math.min.apply(null, f_tempArray);
+            if(max_temp-min_temp>=10)
+            {
+                Daily_Temperature_Different.innerText="오늘 일교차가 크니 겉옷을 챙기세요.";
+            }else{
+                Daily_Temperature_Different.innerText="오늘 일교차는 크지 않아요."
+            }    
             }
             //비 오는 시간 체크
            
