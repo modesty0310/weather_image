@@ -1,4 +1,3 @@
-let f_tempArray = new Array();
 let temp_json = [];
 
 //css element
