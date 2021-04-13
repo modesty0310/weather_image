@@ -88,7 +88,7 @@ function getWeather(lat, lng) {
             dayDate.innerText = year+" / "+month+ " / " + day;
             dayName.innerText = weekText;
             weatherTemp.innerText = n_temperature;
-            weatherText.innerText = description.toUpperCase();
+            weatherText.innerText = description;
 
              //이후 날씨 옷과 비교하기 위해 값을 담을 배열 객체 선언 ------------------------------------------
              let f_hourArray = new Array();
