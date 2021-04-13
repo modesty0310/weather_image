@@ -226,7 +226,7 @@ async function predict(image) {
         scoreData[idx] = score;
         nameData[idx] = name;
         idx++;
-
+        console.log(classPrediction);
         let result = name;
         return new Promise (function(resolve, reject){
             resolve(result);
