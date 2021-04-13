@@ -309,7 +309,7 @@ main {
 }
 
 @media  screen and (max-width:600px) {
-  .body{
+  body{
     display: flex;
     justify-content: center;
     align-items: center;
