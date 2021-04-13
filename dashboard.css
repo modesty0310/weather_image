@@ -309,11 +309,9 @@ main {
 }
 
 @media  screen and (max-width:600px) {
-  body{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+	.container{
+		margin-top:70px
+	}
   .dashboardContainer{
 	width:550px;
     flex-direction: column;
