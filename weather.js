@@ -14,7 +14,22 @@ let f_pop       = new Array();
 let f_icon_des = new Array();
 let rain_time = "";
 
+// 처음 텍스뷰 선언
+const temp_defferent=document.getElementById("logic_temp_defferent");
+const rain_cloud=document.getElementById("logic_rain_cloud");
+const Clothes_select=document.getElementById("logic_clothes_select");
 
+/* $(document).ready(function(){
+    $('.slider').bxSlider({
+        minSlides: 1,
+        maxSlides: 7,
+        moveSlides: 1,
+        slideWidth: 200,
+        slideMargin: 30,
+        auto: true,
+        autoHover: true, 
+    });
+}); */
 
 
 const week = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
@@ -31,7 +46,7 @@ const iconArray = {
      '13n' : 'fas fa-snowflake',
      '50n' : 'fas fa-smog',
      '01d' : 'fas fa-sun',
-     '02d' : 'fas fa-cloud-sun',
+     '02d' : 'fas fa cloud-sun',
      '03d' : 'fas fa-cloud',
      '04d' : 'fas fa-cloud-meatball',
      '09d' : 'fas fa-cloud-sun-rain',
@@ -72,6 +87,54 @@ function getWeather(lat, lng) {
             //현재 ---------------------------------------------------------------------------
             const n_temperature = json.current.temp + "°C"; //현재 온도
             temp_json = json.current.temp
+
+            if(temp_json<=25 && temp_json>=21)
+            {
+                rain_cloud.innerText="현재 야외활동하기 좋은 날씨입니다.";
+                for(let i=0; i<10; i++){
+                    $('.slider').append("<div><img src='spring/"+i+".jpeg'></div>");
+                }
+                $('.slider').bxSlider({
+                    minSlides: 1,
+                    maxSlides: 7,
+                    moveSlides: 1,
+                    slideWidth: 200,
+                    slideMargin: 30,
+                    auto: true,
+                    autoHover: true, 
+                });
+
+            }
+            else if(temp_json>25){
+                rain_cloud.innerText =  "활동을 하기엔 더운 날씨입니다.";
+                for(let i=0; i<10; i++){
+                    $('.slider').append("<div><img src='spring/"+i+".jpeg'></div>");
+                }
+                $('.slider').bxSlider({
+                    minSlides: 1,
+                    maxSlides: 7,
+                    moveSlides: 1,
+                    slideWidth: 200,
+                    slideMargin: 30,
+                    auto: true,
+                    autoHover: true, 
+                });
+            }
+            else{
+                rain_cloud.innerText =  "활동을 하기엔 추운 날씨입니다.";
+                for(let i=0; i<10; i++){
+                    $('.slider').append("<div><img src='spring/"+i+".jpeg'></div>");
+                }
+                $('.slider').bxSlider({
+                    minSlides: 1,
+                    maxSlides: 7,
+                    moveSlides: 1,
+                    slideWidth: 200,
+                    slideMargin: 30,
+                    auto: true,
+                    autoHover: true, 
+                });
+            }
 
             //현재 시간
             const now_time = json.current.dt; //유닉스시간
@@ -145,9 +208,11 @@ function getWeather(lat, lng) {
 
                 const f_pop = json.hourly[i].pop;
                 forecast_pop.innerText = `${f_pop}%\n`;
-                const Daily_cloud =document.getElementById("logic_rain_cloud");
-                const outside_action=document.getElementById("logic_action");
-
+                
+                Clothes_select.innerText="사진을 찍어 주세요.";
+                //temp_defferent.innerText="현재 야외활동하기 좋은 날씨입니다."
+                //rain_cloud.innerText = "현재 야외활동하기 좋은 날씨입니다.";
+                
                 if(f_icon_des[i]=="light rain"||f_icon_des[i]=="moderate rain"||f_icon_des[i]=="heavy intensity rain"||f_icon_des[i]=="very heavy rain" ||f_icon_des[i]=="extreme rain"||f_icon_des[i]=="freezing rain"||f_icon_des[i]=="light intensity shower rain"||f_icon_des[i]=="shower rain"||f_icon_des[i]=="heavy intensity shower rain"||f_icon_des[i]=="ragged shower rain")
                 {   
                     if(f_icon_des[i].indexOf("rain") != -1){
@@ -158,7 +223,7 @@ function getWeather(lat, lng) {
                     var rain_time_calcural=rain_time-N_Hour;
                     if(rain_time_calcural>0){
                         console.log(rain_time_calcural+"시 후에 비가 올 예정이니 우산을 챙기세요");
-                        Daily_cloud.innerText =  `${rain_time_calcural}시 후에 금일 비가 올 예정이니 우산을 챙기세요.`;
+                        rain_cloud.innerText =  `${rain_time_calcural}시 후에 금일 비가 올 예정이니 우산을 챙기세요.`;
                     }
                 }
                 else if(f_icon_des[i]=="light snow"||f_icon_des[i]=="Snow"||f_icon_des[i]=="Heavy snow"||f_icon_des[i]=="Sleet" ||f_icon_des[i]=="Light shower sleet"||f_icon_des[i]=="Shower sleet"||f_icon_des[i]=="Light rain and snow"||f_icon_des[i]=="Rain and snow"||f_icon_des[i]=="Light shower snow"||f_icon_des[i]=="Shower snow"||f_icon_des[i]=="Heavy shower snow")
@@ -169,27 +234,22 @@ function getWeather(lat, lng) {
                     var rain_time_calcural=rain_time-N_Hour;
                     if(rain_time_calcural>0){
                         console.log(rain_time_calcural+"시 후에 비가 올 예정이니 우산을 챙기세요");
-                        Daily_cloud.innerText =  `"${rain_time_calcural}시 후에 금일 비가 올 예정이니 우산을 챙기세요."`;
-                }
-                else{
-                    //console.log(N_Temp);
-                    //현재 날씨 야외활동 여부
-                    if(N_Temp<=25 && N_Temp>=21)
-                    {
-    
-                        outside_action.innerText="현재 야외활동하기 좋은 날씨입니다."
+                        rain_cloud.innerText =  `"${rain_time_calcural}시 후에 금일 비가 올 예정이니 우산을 챙기세요."`;
                     }
+                    else{
+                        rain_cloud.innerText =  "오늘은 비나 눈소식이 없습니다."
+                    }
+                
                 }
-            }
             let max_temp = Math.max.apply(null, f_tempArray);
             let min_temp = Math.min.apply(null, f_tempArray);
             if(max_temp-min_temp>=10)
             {
-                Daily_Temperature_Different.innerText="오늘 일교차가 크니 겉옷을 챙기세요.";
+                temp_defferent.innerText="오늘 일교차가 크니 겉옷을 챙기세요.";
             }else{
-                Daily_Temperature_Different.innerText="오늘 일교차는 크지 않아요."
+                temp_defferent.innerText="오늘 일교차는 크지 않아요."
             }    
-            }
+        }
             //비 오는 시간 체크
            
 
