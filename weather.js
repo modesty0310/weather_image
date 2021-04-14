@@ -88,7 +88,7 @@ function getWeather(lat, lng) {
             const n_temperature = json.current.temp + "°C"; //현재 온도
             temp_json = json.current.temp
 
-            if(temp_json<=25 && temp_json>=21)
+            if(temp_json<=25 && temp_json>=15)
             {
                 rain_cloud.innerText="현재 야외활동하기 좋은 날씨입니다.";
                 for(let i=0; i<10; i++){
@@ -200,16 +200,16 @@ function getWeather(lat, lng) {
 
 
                 const f_temp = json.hourly[i].temp;
-                forecast_temp.innerText = `${f_temp}°C\n`;
+                forecast_temp.innerText = `${f_temp}°C`;
                 f_tempArray[i]  = f_temp;
 
                 const f_w_speed = json.hourly[i].wind_speed;
-                forecast_w_speed.innerText = `${f_w_speed}m/s\n`;
+                forecast_w_speed.innerText = `${f_w_speed}m/s`;
 
                 const f_pop = json.hourly[i].pop;
-                forecast_pop.innerText = `${f_pop}%\n`;
+                forecast_pop.innerText = `${f_pop*100}%`;
                 
-                Clothes_select.innerText="사진을 찍어 주세요.";
+                Clothes_select.innerText="Comment";
                 //temp_defferent.innerText="현재 야외활동하기 좋은 날씨입니다."
                 //rain_cloud.innerText = "현재 야외활동하기 좋은 날씨입니다.";
                 
@@ -222,8 +222,7 @@ function getWeather(lat, lng) {
                     // rain_time=f_hourArray[f_icon_des[i].indexOf("clouds")];
                     var rain_time_calcural=rain_time-N_Hour;
                     if(rain_time_calcural>0){
-                        console.log(rain_time_calcural+"시 후에 비가 올 예정이니 우산을 챙기세요");
-                        rain_cloud.innerText =  `${rain_time_calcural}시 후에 금일 비가 올 예정이니 우산을 챙기세요.`;
+                        rain_cloud.innerText =  `${rain_time_calcural}시간 후에 비가 올 확률이 ${f_pop*100}%입니다. 우산을 챙기세요.`;
                     }
                 }
                 else if(f_icon_des[i]=="light snow"||f_icon_des[i]=="Snow"||f_icon_des[i]=="Heavy snow"||f_icon_des[i]=="Sleet" ||f_icon_des[i]=="Light shower sleet"||f_icon_des[i]=="Shower sleet"||f_icon_des[i]=="Light rain and snow"||f_icon_des[i]=="Rain and snow"||f_icon_des[i]=="Light shower snow"||f_icon_des[i]=="Shower snow"||f_icon_des[i]=="Heavy shower snow")
@@ -233,8 +232,7 @@ function getWeather(lat, lng) {
                     }
                     var rain_time_calcural=rain_time-N_Hour;
                     if(rain_time_calcural>0){
-                        console.log(rain_time_calcural+"시 후에 비가 올 예정이니 우산을 챙기세요");
-                        rain_cloud.innerText =  `"${rain_time_calcural}시 후에 금일 비가 올 예정이니 우산을 챙기세요."`;
+                        rain_cloud.innerText =  `"${rain_time_calcural}시간 후에 금일 비가 올 예정이니 우산을 챙기세요."`;
                     }
                     else{
                         rain_cloud.innerText =  "오늘은 비나 눈소식이 없습니다."
