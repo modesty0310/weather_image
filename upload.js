@@ -194,7 +194,7 @@ $("#imageUpload").change(async function(e) {
         }
         $("#div_load_image").hide();
         $("#body").css('opacity','');
-    }), 5000)
+    }), 2000)
 });
 
 let scoreData = new Array();
