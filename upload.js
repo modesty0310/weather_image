@@ -194,7 +194,7 @@ $("#imageUpload").change(async function(e) {
         }
         $("#div_load_image").hide();
         $("#body").css('opacity','');
-    }), 2000)
+    }), 5000)
 });
 
 let scoreData = new Array();
@@ -307,10 +307,12 @@ async function check_dress(temp_json,result){
             else if(temp_json>=12&&temp_json<=16)
             {
                 console.log("현재"+temp_json+"℃ 입니다.\n ");
-                if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지"))
+                if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지"))
                 {
                     console.log("날씨가 추우니 좀 더 두껍게 입으세요");
-                    Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
+                    Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요.";
+                }else if((result.top=="반팔"&&result.bottom=="긴바지")){
+                    Clothes_select.innerText="날씨가 추우니 맨투맨이나 얇은 아우터를 입는것을 추천합니다.";
                 }
                 else{
                     console.log("활동하기 딱 좋은 복장이네요. 12~16");
