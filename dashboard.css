@@ -158,6 +158,41 @@
     border-radius: 25px;
   }
 
+  .after{
+    width: 80%;
+  }
+
+  .umbrella{
+    width: 80%;
+  }
+
+  .result_label{
+    height: 50px;
+    margin-bottom: 10px;
+    border-radius: 25px;
+    box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.5);
+    background: whitesmoke;
+    display: flex;
+    justify-content: center;
+  }
+
+  .after_label{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 99%;
+    height: 47px;
+    background: white;
+    border-radius: 25px;
+  }
+
+  .after_label p{
+    margin-top: 20px;
+    margin-left: 5px;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
   #logic_clothes_select{
     margin-top: 10px;
     font-weight: bold;
@@ -321,6 +356,17 @@ main {
 }
 .legend span {
   float: right;
+}
+
+.cloth_section{
+  display: flex;
+  justify-content: space-between;
+}
+
+.cloth_name{
+  height: 200px;
+  border: 1px solid black;
+  
 }
 
 @media  screen and (max-width:600px) {
