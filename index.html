@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="upload.css">
     <link rel="stylesheet" href="index.css"/>
     <link rel="stylesheet" href="index.css"/>
+    <link rel="stylesheet" href="slide.css"/>
     <link rel="stylesheet" href="dashboard.css"/>
     <link
         href='http://fonts.googleapis.com/css?family=Open+Sans'
@@ -27,9 +28,13 @@
         integrity="sha384-qF/QmIAj5ZaYFAeQcrQ6bfVMAh4zZlrGwTPY7T/M+iTTLJqJBJjwwnsE5Y0mV7QK"
         crossorigin="anonymous">
 
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+
+    <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script> -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!-- <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script> -->
     <script
         src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
     <script
@@ -58,7 +63,7 @@
                 <div class="avatar-preview" id="avatar-preview">
                     <div
                         id="imagePreview"
-                        style="background-image: url(background.png);"></div>
+                        style="background-image: url(https://blogfiles.pstatic.net/MjAyMTA0MTNfMjYz/MDAxNjE4Mjk3NTc0NTYx.kR9hQB_SlBzij3qBnTtt3vr9kKPVfxMLEgg4jMeLHJQg.wac5xpms3llXL4DW8lyYFUhU8hDYJo7KRJrLzEdEhfkg.PNG.kbg05032/grey.png);"></div>
                 </div>
             </div>
         </div>
@@ -87,13 +92,22 @@
 
             <!-- <div style="width: 100%; height: 50px; border: 1px solid black;
             margin-bottom: 10px;"> -->
-            <div class="result">
-                <div class="result ab">
-                    <p id="logic_action"></p>
-                    <p id="logic_rain_cloud"></p>
+            <div class="result present">
+                <div class="result1 ab">
                     <p id="logic_clothes_select"></p>
                 </div>
             </div>
+            <div class="result after">
+                <div class="result2 ab">
+                    <p id="logic_temp_defferent"></p>
+                </div>
+            </div>
+            <div class="result umbrella">
+                <div class="result3 ab">
+                    <p id="logic_rain_cloud"></p>
+                </div>
+            </div>
+            
 
             <div class="tiwnContainer">
                 <div class="mainScreen fir">
@@ -143,6 +157,10 @@
                     </main>
                 </div>
             </div>
+
+            <div class="slider">    
+            </div>
+       
         </div>
         <div id="img_modal">
             <img id="img_view">
