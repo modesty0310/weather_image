@@ -266,8 +266,8 @@ async function check_dress(temp_json,result){
                     Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
                 }
                 else{
-                    console.log("활동하기 딱 좋은 복장이네요.");
-                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                    console.log("현재 날씨에 입기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="현재 날씨에 입기 딱 좋은 복장이네요.";
                 }
             }
             else if(temp_json>=27){
@@ -277,8 +277,8 @@ async function check_dress(temp_json,result){
                     Clothes_select.innerText="날씨가 더우니 좀 더 가볍게 입으세요";
                 }
                 else{
-                    console.log("활동하기 딱 좋은 복장이네요.");
-                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                    console.log("현재 날씨에 입기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="현재 날씨에 입기 딱 좋은 복장이네요.";
                 }
             }
             else if(temp_json>=17&&temp_json<=22){
@@ -290,8 +290,8 @@ async function check_dress(temp_json,result){
                     Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
                 }
                 else{
-                    console.log("활동하기 딱 좋은 복장이네요.");
-                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                    console.log("현재 날씨에 입기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="현재 날씨에 입기 딱 좋은 복장이네요.";
                 }
             }
             // else if(temp_json>=17||temp_json<=19)
@@ -301,7 +301,7 @@ async function check_dress(temp_json,result){
             //     if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지"))
             //     {console.log("날씨가 추우니 좀 더 두껍게 입으세요");}
             //     else{
-            //         console.log("활동하기 딱 좋은 복장이네요.");
+            //         console.log("현재 날씨에 입기 딱 좋은 복장이네요.");
             //     }
             // }
             else if(temp_json>=12&&temp_json<=16)
@@ -315,8 +315,8 @@ async function check_dress(temp_json,result){
                     Clothes_select.innerText="날씨가 추우니 맨투맨이나 얇은 아우터를 입는것을 추천합니다.";
                 }
                 else{
-                    console.log("활동하기 딱 좋은 복장이네요. 12~16");
-                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                    console.log("현재 날씨에 입기 딱 좋은 복장이네요. 12~16");
+                    Clothes_select.innerText="현재 날씨에 입기 딱 좋은 복장이네요.";
                 }
             }
             else if(temp_json<=11)
@@ -327,8 +327,8 @@ async function check_dress(temp_json,result){
                     Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
                 }
                 else{
-                    console.log("활동하기 딱 좋은 복장이네요.");
-                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                    console.log("현재 날씨에 입기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="현재 날씨에 입기 딱 좋은 복장이네요.";
                 }
             }
         }
@@ -349,8 +349,8 @@ async function check_dress(temp_json,result){
                     Clothes_select.innerText="날씨가 더우니 좀 더 가볍게 입으세요";
                 }
                 else{
-                    console.log("활동하기 딱 좋은 복장이네요.");
-                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                    console.log("현재 날씨에 입기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="현재 날씨에 입기 딱 좋은 복장이네요.";
                 }
             }
             else if(temp_json>=27){
@@ -360,8 +360,8 @@ async function check_dress(temp_json,result){
                     Clothes_select.innerText="날씨가 더우니 좀 더 가볍게 입으세요";
                 }
                 else{
-                    console.log("활동하기 딱 좋은 복장이네요.");
-                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                    console.log("현재 날씨에 입기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="현재 날씨에 입기 딱 좋은 복장이네요.";
                 }
             }
             else if(temp_json>=17&&temp_json<=22){
@@ -373,8 +373,8 @@ async function check_dress(temp_json,result){
                     Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
                 }
                 else{
-                    console.log("활동하기 딱 좋은 복장이네요.");
-                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                    console.log("현재 날씨에 입기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="현재 날씨에 입기 딱 좋은 복장이네요.";
                 }
             }
             // else if(temp_json>=17||temp_json<=19)
@@ -384,7 +384,7 @@ async function check_dress(temp_json,result){
             //     if((result.top=="민소매" && result.bottom=="반바지")||(result.top=="민소매" && result.bottom=="긴바지")||(result.top=="반팔"&&result.bottom=="반바지")||(result.top=="반팔"&&result.bottom=="긴바지"))
             //     {console.log("날씨가 추우니 좀 더 두껍게 입으세요");}
             //     else{
-            //         console.log("활동하기 딱 좋은 복장이네요.");
+            //         console.log("현재 날씨에 입기 딱 좋은 복장이네요.");
             //     }
             // }
             else if(temp_json>=12&&temp_json<=16)
@@ -398,8 +398,8 @@ async function check_dress(temp_json,result){
                     Clothes_select.innerText="날씨가 추우니 맨투맨이나 얇은 아우터를 입는것을 추천합니다.";
                 }
                 else{
-                    console.log("활동하기 딱 좋은 복장이네요. 12~16");
-                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                    console.log("현재 날씨에 입기 딱 좋은 복장이네요. 12~16");
+                    Clothes_select.innerText="현재 날씨에 입기 딱 좋은 복장이네요.";
                 }
             }
             else if(temp_json<=11)
@@ -411,8 +411,8 @@ async function check_dress(temp_json,result){
                     Clothes_select.innerText="날씨가 추우니 좀 더 두껍게 입으세요";
                 }
                 else{
-                    console.log("활동하기 딱 좋은 복장이네요.");
-                    Clothes_select.innerText="활동하기 딱 좋은 복장이네요.";
+                    console.log("현재 날씨에 입기 딱 좋은 복장이네요.");
+                    Clothes_select.innerText="현재 날씨에 입기 딱 좋은 복장이네요.";
                 }
             }
         }
