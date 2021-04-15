@@ -90,7 +90,7 @@ function getWeather(lat, lng) {
 
             if(temp_json<=25 && temp_json>=15)
             {
-                rain_cloud.innerText="현재 야외활동하기 좋은 날씨입니다.";
+                rain_cloud.innerText="오늘은 비나 눈소식이 없습니다.";
                 for(let i=0; i<10; i++){
                     $('.slider').append("<div><img src='spring/"+i+".jpeg'></div>");
                 }
@@ -106,7 +106,7 @@ function getWeather(lat, lng) {
 
             }
             else if(temp_json>25){
-                rain_cloud.innerText =  "활동을 하기엔 더운 날씨입니다.";
+                rain_cloud.innerText =  "오늘은 비나 눈소식이 없습니다.";
                 for(let i=0; i<10; i++){
                     $('.slider').append("<div><img src='spring/"+i+".jpeg'></div>");
                 }
@@ -121,7 +121,7 @@ function getWeather(lat, lng) {
                 });
             }
             else{
-                rain_cloud.innerText =  "활동을 하기엔 추운 날씨입니다.";
+                rain_cloud.innerText =  "오늘은 비나 눈소식이 없습니다.";
                 for(let i=0; i<10; i++){
                     $('.slider').append("<div><img src='spring/"+i+".jpeg'></div>");
                 }
